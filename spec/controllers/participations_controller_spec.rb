@@ -127,8 +127,8 @@ describe ParticipationsController do
         # specifies that the Participation created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Participation.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => @p.id, :volunteer_id => @user, :participation => {'these' => 'params'}
+        Participation.any_instance.should_receive(:update_attributes).with('note' => 'note')
+        put :update, :id => @p.to_param, :volunteer_id => @user.to_param, participation: {'note' => 'note'}
       end
 
       it "assigns the requested participation as @participation" do

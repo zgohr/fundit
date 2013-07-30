@@ -6,6 +6,7 @@ FactoryGirl.define do
   factory :organization do
     name                  "Foo Org"
     email                 { FactoryGirl.generate :org_email }
+    avatar_url            'somwhere'
     password              'password'
     password_confirmation { |u| u.password}
     stripe_token          "orgtoken"

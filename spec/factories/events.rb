@@ -7,5 +7,7 @@ FactoryGirl.define do
     description 'Foo Event is an event.'
     name 'Foo Event'
     date 3.days.from_now
+    time Time.now
+    location 'Somewhere'
   end
 end

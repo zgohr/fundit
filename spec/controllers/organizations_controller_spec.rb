@@ -17,9 +17,12 @@ describe OrganizationsController do
     before :each do
       Event.all.each &:destroy
       @org = create :organization
-      @evt1 = create :event, :date => 2.days.ago, :organization => @org
-      @evt2 = create :event, :date => 4.days.from_now, :organization => @org
-      @evt3 = create :event, :date => 2.days.from_now, :organization => @org
+      @evt1 = create :event, :date => 2.days.ago, :organization => @org,
+        :time => Time.now
+      @evt2 = create :event, :date => 4.days.from_now, :organization => @org,
+        :time => Time.now
+      @evt3 = create :event, :date => 2.days.from_now, :organization => @org,
+        :time => Time.now
     end
 
     it "assigns future events as @futureevents" do
@@ -95,14 +98,14 @@ describe OrganizationsController do
       it "assigns a newly created but unsaved organization as @organization" do
         # Trigger the behavior that occurs when invalid params are submitted
         Organization.any_instance.stub(:save).and_return(false)
-        post :create, :organization => {}
+        post :create, organization: {name: "Bar"}
         assigns(:organization).should be_a_new(Organization)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Organization.any_instance.stub(:save).and_return(false)
-        post :create, :organization => {}
+        post :create, organization: {name: "Bar"}
         response.should render_template("new")
       end
     end
@@ -119,23 +122,23 @@ describe OrganizationsController do
         # specifies that the Organization created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Organization.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => @org.to_param, :organization => {'these' => 'params'}
+        Organization.any_instance.should_receive(:update_attributes).with('name' => 'name')
+        put :update, :id => @org.to_param, organization: {name: 'name'}
       end
 
       it "assigns the requested organization as @organization" do
-        put :update, :id => @org.to_param, :organization => attributes_for(:organization)
+        put :update, :id => @org.id, :organization => attributes_for(:organization)
         assigns(:organization).should eq(@org)
       end
 
       it "redirects to the organization" do
-        put :update, :id => @org.to_param, :organization => attributes_for(:organization)
+        put :update, :id => @org.id, :organization => attributes_for(:organization)
         response.should redirect_to(@org)
       end
 
       it "requires the user to own the organization" do
         log_in_as :organization
-        put :update, :id => @org.to_param, :organization => attributes_for(:organization)
+        put :update, :id => @org.id, :organization => attributes_for(:organization)
         response.should redirect_to(root_url)
       end
     end
@@ -143,15 +146,15 @@ describe OrganizationsController do
     describe "with invalid params" do
       it "assigns the organization as @organization" do
         # Trigger the behavior that occurs when invalid params are submitted
-        Organization.any_instance.stub(:save).and_return(false)
-        put :update, :id => @org.to_param, :organization => attributes_for(:organization)
+        Organization.any_instance.stub(:update_attributes).and_return(false)
+        put :update, :id => @org.id, :organization => attributes_for(:organization)
         assigns(:organization).should eq(@org)
       end
 
       it "re-renders the 'edit' template" do
         # Trigger the behavior that occurs when invalid params are submitted
-        Organization.any_instance.stub(:save).and_return(false)
-        put :update, :id => @org.to_param, :organization => attributes_for(:organization)
+        Organization.any_instance.stub(:update_attributes).and_return(false)
+        put :update, :id => @org.id, organization: attributes_for(:organization)
         response.should render_template("edit")
       end
     end

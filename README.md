@@ -11,17 +11,15 @@ Second, move config/filepicker.example.yml to config/filepicker.yml and
 fill in the API key. Alternatively, you can run the server with the
 environment variable FILEPICKER_KEY set to your API key.
 
+Third, seee ```config/environments/production.rb``` to set up your Pony config for sending email.
+
 Then, do the Rails standard setup: `bundle install`, `rake db:migrate`,
 `rails server`
 
-## Demo
-
-A demo is served courtesy of Heroku at http://fundit.herokuapp.com
-
 ## Test Suite
 
-FundIt includes a test suite that exercises all public controller methods.
-It can be run with `rake spec`.
+After running ```bundle install```, you can use ```rake spec``` to run the tests,
+or run them with spork and guard using ```rake guard```.
 
 ### Acknowledgements
 

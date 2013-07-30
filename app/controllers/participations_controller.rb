@@ -49,7 +49,7 @@ class ParticipationsController < ApplicationController
   # POST /volunteers/1/participations
   # POST /volunteers/1/participations.json
   def create
-    @participation = Participation.new(params[:participation])
+    @participation = Participation.new(participation_params)
     @participation.volunteer = current_user
     @participation.event = Event.find(params[:event_id])
 
@@ -67,10 +67,8 @@ class ParticipationsController < ApplicationController
   # PUT /volunteers/1/participations/1
   # PUT /volunteers/1/participations/1.json
   def update
-    @participation = Participation.find(params[:id])
-
     respond_to do |format|
-      if @participation.update_attributes(params[:participation])
+      if @participation.update_attributes(participation_params)
         format.html { redirect_to volunteer_participation_url(current_user, @participation), notice: 'Participation was successfully updated.' }
         format.json { head :no_content }
       else
@@ -83,7 +81,7 @@ class ParticipationsController < ApplicationController
   # POST /volunteers/1/participations/1
   # POST /volunteers/1/participations/1.json
   def donate
-    @donation = Donation.new(params[:donation])
+    @donation = Donation.new(donation_params)
     @donation.participation = @participation
 
     respond_to do |format|
@@ -104,7 +102,7 @@ class ParticipationsController < ApplicationController
   # POST /volunteers/1/participations/1
   # POST /volunteers/1/participations/1.json
   def offline_donate
-    @offline_donation = OfflineDonation.new(params[:offline_donation])
+    @offline_donation = OfflineDonation.new(offlinedonation_params)
     @offline_donation.participation = @participation
 
     respond_to do |format|
@@ -155,4 +153,24 @@ class ParticipationsController < ApplicationController
       redirect_to root_url, :alert => "You don't own that participation."
     end
   end
+
+  def participation_params
+    params.require(:participation).permit(:goal, :note)
+  end
+
+  def offlinedonation_params
+    params.require(:offline_donation).permit(:amount, :name, :donation_type, :is_name_private, :is_amount_private,
+                  :email, :thank_you_sent)
+  end
+
+  def event_params
+    params.require(:event).permit(:id, :description, :name, :date, :solicit_email, :thank_you_email,
+                  :time, :location, :image_url)
+  end
+
+  def donation_params
+    params.require(:donation).permit(:amount, :stripe_token, :message, :name, :is_name_private,
+                  :is_message_private, :email, :thank_you_sent)
+  end
+
 end

@@ -45,7 +45,7 @@ class VolunteersController < ApplicationController
   # POST /volunteers
   # POST /volunteers.json
   def create
-    @volunteer = Volunteer.new(params[:volunteer])
+    @volunteer = Volunteer.new(volunteer_params)
 
     respond_to do |format|
       if @volunteer.save
@@ -63,10 +63,8 @@ class VolunteersController < ApplicationController
   # PUT /volunteers/1
   # PUT /volunteers/1.json
   def update
-    @volunteer = Volunteer.find(params[:id])
-
     respond_to do |format|
-      if @volunteer.update_attributes(params[:volunteer])
+      if @volunteer.update_attributes(volunteer_params)
         format.html { redirect_to @volunteer, notice: 'Volunteer was successfully updated.' }
         format.json { head :no_content }
       else
@@ -86,5 +84,10 @@ class VolunteersController < ApplicationController
     unless @volunteer == current_user
       redirect_to root_url, :alert => "You don't own that volunteer."
     end
+  end
+
+  def volunteer_params
+    params.require(:volunteer).permit(:name, :last_name, :email, :bio,
+                                      :avatar_url, :password, :password_confirmation)
   end
 end

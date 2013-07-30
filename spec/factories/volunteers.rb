@@ -7,6 +7,8 @@ FactoryGirl.define do
     name                  "Foo"
     last_name             "Volunteer"
     email                 { FactoryGirl.generate :volunteer_email }
+    bio                   "bio"
+    avatar_url            "some url"
     password              'password'
     password_confirmation { |u| u.password}
   end

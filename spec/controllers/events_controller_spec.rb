@@ -4,7 +4,9 @@ describe EventsController do
 
   before :each do
     @organization = log_in_as :organization
-    @event = create :event, :organization => @organization
+    @event = create :event, :organization => @organization,
+      :time => 10.minutes.ago,
+      :location => "Location"
   end
 
   describe "GET index" do
@@ -21,8 +23,9 @@ describe EventsController do
 
   describe "GET show" do
     it "assigns the requested event as @event" do
-      get :show, :id => @event.id, :organization_id => @organization.id
-      assigns(:event).should == @event
+      event = create :event
+      get :show, :id => event.id
+      assigns(:event).should eq(event)
     end
   end
 
@@ -45,13 +48,13 @@ describe EventsController do
 
   describe "GET edit" do
     it "assigns the requested event as @event" do
-      get :edit, :id => @event.id, :organization_id => @organization.id
+      get :edit, :id => @event.to_param
       assigns(:event).should == @event
     end
 
     it "requires the user to own the event" do
       log_in_as :organization
-      get :edit, :id => @event.id, :organization_id => @organization.id
+      get :edit, :id => @event.to_param
       response.should redirect_to(root_url)
     end
   end
@@ -90,7 +93,7 @@ describe EventsController do
       it "assigns a newly created but unsaved event as @event" do
         # Trigger the behavior that occurs when invalid params are submitted
         Event.any_instance.stub(:save).and_return(false)
-        post :create, :event => {}
+        post :create, :event => {'invalid' => 'invalid'}
         assigns(:event).should be_a_new(Event)
         assigns(:event).should_not be_persisted
       end
@@ -98,7 +101,7 @@ describe EventsController do
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Event.any_instance.stub(:save).and_return(false)
-        post :create, :event => {}
+        post :create, :event => {'invalid' => 'invalid'}
         response.should render_template("new")
       end
     end
@@ -111,23 +114,23 @@ describe EventsController do
         # specifies that the Event created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Event.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, {:id => @event.id, :organization_id => @organization.id, :event => {'these' => 'params'}}
+        Event.any_instance.should_receive(:update_attributes).with({'name' => 'name'})
+        put :update, {:id => @event.id, :event => {'name' => 'name'}}
       end
 
       it "assigns the requested event as @event" do
-        put :update, {:id => @event.id, :organization_id => @organization.id, :event => attributes_for(:event)}
+        put :update, {:id => @event.id, :event => attributes_for(:event)}
         assigns(:event).should eq(@event)
       end
 
       it "redirects to the event" do
-        put :update, {:id => @event.id, :organization_id => @organization.id, :event => attributes_for(:event)}
+        put :update, {:id => @event.id, :event => attributes_for(:event)}
         response.should redirect_to([@organization, @event])
       end
 
       it "requires the user to own the event" do
         log_in_as :organization
-        get :edit, :id => @event.id, :organization_id => @organization.id
+        get :edit, :id => @event.to_param
         response.should redirect_to(root_url)
       end
     end
@@ -136,14 +139,14 @@ describe EventsController do
       it "assigns the event as @event" do
         # Trigger the behavior that occurs when invalid params are submitted
         Event.any_instance.stub(:save).and_return(false)
-        put :update, {:id => @event.id, :organization_id => @organization.id, :event => {}}
+        put :update, {:id => @event.id, :organization_id => @organization.id, :event => {name: "Bar"}}
         assigns(:event).should eq(@event)
       end
 
       it "re-renders the 'edit' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Event.any_instance.stub(:save).and_return(false)
-        put :update, {:id => @event.id, :organization_id => @organization.id, :event => {}}
+        put :update, {:id => @event.id, :organization_id => @organization.id, :event => {name: "Bar"}}
         response.should render_template("edit")
       end
     end

@@ -9,15 +9,15 @@
 # from scratch. The latter is a flawed and unsustainable approach (the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
-# It's strongly recommended to check this file into your version control system.
+# It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121210022846) do
+ActiveRecord::Schema.define(version: 20121210022846) do
 
-  create_table "donations", :force => true do |t|
+  create_table "donations", force: true do |t|
     t.integer  "participation_id"
     t.integer  "amount"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "message"
     t.string   "name"
     t.boolean  "is_message_private"
@@ -27,11 +27,11 @@ ActiveRecord::Schema.define(:version => 20121210022846) do
     t.boolean  "thank_you_sent"
   end
 
-  create_table "events", :force => true do |t|
+  create_table "events", force: true do |t|
     t.integer  "organization_id"
     t.text     "description"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "name"
     t.date     "date"
     t.text     "thank_you_email"
@@ -41,54 +41,54 @@ ActiveRecord::Schema.define(:version => 20121210022846) do
     t.string   "location"
   end
 
-  create_table "follows", :force => true do |t|
+  create_table "follows", force: true do |t|
     t.integer  "volunteer_id"
     t.integer  "organization_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "offline_donations", :force => true do |t|
+  create_table "offline_donations", force: true do |t|
     t.integer  "amount"
     t.string   "name"
     t.string   "donation_type"
     t.integer  "participation_id"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.boolean  "is_name_private"
     t.boolean  "is_amount_private"
     t.string   "email"
     t.boolean  "thank_you_sent"
   end
 
-  create_table "organizations", :force => true do |t|
+  create_table "organizations", force: true do |t|
     t.string   "name"
     t.string   "email"
     t.string   "password_digest"
     t.string   "stripe_token"
     t.text     "bio"
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "stripe_pub_key"
     t.string   "avatar_url"
-    t.integer  "follows_count",   :default => 0
+    t.integer  "follows_count",   default: 0
   end
 
-  create_table "participations", :force => true do |t|
+  create_table "participations", force: true do |t|
     t.integer  "volunteer_id"
     t.integer  "event_id"
     t.text     "note"
     t.integer  "goal"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "volunteers", :force => true do |t|
+  create_table "volunteers", force: true do |t|
     t.string   "name"
     t.string   "email"
     t.string   "password_digest"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "avatar_url"
     t.string   "last_name"
     t.string   "bio"

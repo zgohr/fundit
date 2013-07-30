@@ -53,7 +53,7 @@ class OrganizationsController < ApplicationController
   # POST /organizations
   # POST /organizations.json
   def create
-    @organization = Organization.new(params[:organization])
+    @organization = Organization.new(organization_params)
 
     respond_to do |format|
       if @organization.save
@@ -72,7 +72,7 @@ class OrganizationsController < ApplicationController
   # PUT /organizations/1.json
   def update
     respond_to do |format|
-      if @organization.update_attributes(params[:organization])
+      if @organization.update_attributes(organization_params)
         format.html { redirect_to @organization, notice: 'Organization was successfully updated.' }
         format.json { head :no_content }
       else
@@ -89,7 +89,7 @@ class OrganizationsController < ApplicationController
         format.html { redirect_to @organization, notice: 'You already follow the organization.' }
       end
     else
-      @follow = Follow.new(params[:follow])
+      @follow = Follow.new(follow_params)
 
       @follow.volunteer_id = current_user.id
       @follow.organization_id = params[:id]
@@ -130,6 +130,16 @@ class OrganizationsController < ApplicationController
     unless @organization == current_user
       redirect_to root_url, :alert => "You don't own that organization."
     end
+  end
+
+  def organization_params
+    params.require(:organization).permit(:name, :email, :avatar_url, :password,
+                                         :password_confirmation, :bio, :stripe_token,
+                                         :stripe_code, :stripe_pub_key)
+  end
+
+  def follow_params
+    params.permit(:organization_id, :volunteer_id, :time, :location)
   end
 
 end

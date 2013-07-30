@@ -42,7 +42,7 @@ class EventsController < ApplicationController
   # POST /organizations/1/events
   # POST /organizations/1/events.json
   def create
-    @event = Event.new(params[:event])
+    @event = Event.new(event_params)
     @event.organization = current_user
 
     respond_to do |format|
@@ -68,7 +68,7 @@ class EventsController < ApplicationController
   # PUT /organizations/1/events/1.json
   def update
     respond_to do |format|
-      if @event.update_attributes(params[:event])
+      if @event.update_attributes(event_params)
         format.html { redirect_to organization_event_url(@event.organization, @event), notice: 'Event was successfully updated.' }
         format.json { head :no_content }
       else
@@ -88,5 +88,10 @@ class EventsController < ApplicationController
     unless @event.organization == current_user
       redirect_to root_url, :alert => "You don't own that event."
     end
+  end
+
+  def event_params
+    params.require(:event).permit(:description, :name, :date, :solicit_email, :thank_you_email,
+                                  :time, :location, :image_url, :organization_id)
   end
 end

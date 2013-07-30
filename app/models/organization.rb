@@ -1,7 +1,4 @@
 class Organization < ActiveRecord::Base
-  attr_accessible :bio, :email, :name, :password, :password_confirmation,
-                  :stripe_token, :stripe_code, :stripe_pub_key, :avatar_url
-
   has_many :events
   has_many :follows
   has_secure_password

@@ -1,5 +1,4 @@
 class Participation < ActiveRecord::Base
-  attr_accessible :goal, :note
   belongs_to :event
   belongs_to :volunteer
   has_many :donations

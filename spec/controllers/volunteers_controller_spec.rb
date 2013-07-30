@@ -84,14 +84,14 @@ describe VolunteersController do
       it "assigns a newly created but unsaved volunteer as @volunteer" do
         # Trigger the behavior that occurs when invalid params are submitted
         Volunteer.any_instance.stub(:save).and_return(false)
-        post :create, :volunteer => {}
+        post :create, volunteer: {name: "Bar"}
         assigns(:volunteer).should be_a_new(Volunteer)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Volunteer.any_instance.stub(:save).and_return(false)
-        post :create, :volunteer => {}
+        post :create, volunteer: {name: "Bar"}
         response.should render_template("new")
       end
     end
@@ -108,8 +108,8 @@ describe VolunteersController do
         # specifies that the Volunteer created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Volunteer.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => @volunteer.to_param, :volunteer => {'these' => 'params'}
+        Volunteer.any_instance.should_receive(:update_attributes).with('name' => 'name')
+        put :update, :id => @volunteer.to_param, volunteer: {name: 'name'}
       end
 
       it "assigns the requested volunteer as @volunteer" do

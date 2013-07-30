@@ -1,5 +1,4 @@
 class Volunteer < ActiveRecord::Base
-  attr_accessible :email, :name, :password, :password_confirmation, :avatar_url, :last_name, :bio
   has_many :participations
   has_many :events, :through => :participations
   has_many :donations, :through => :participations
